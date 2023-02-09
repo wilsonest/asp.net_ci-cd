@@ -121,11 +121,17 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AccesoController.cs" />
     <Compile Include="Controllers\ArchivoController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Logica\LO_Usuario.cs" />
     <Compile Include="Models\Archivos.cs" />
+    <Compile Include="Models\Rol.cs" />
+    <Compile Include="Models\Usuarios.cs" />
+    <Compile Include="Permisos\PermisosRolAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -163,6 +169,11 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Archivo\Subir.cshtml" />
     <Content Include="Views\Archivo\Index.cshtml" />
+    <Content Include="Views\Acceso\Inicio.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\SinPermiso.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

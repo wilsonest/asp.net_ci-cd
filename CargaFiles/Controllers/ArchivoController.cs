@@ -94,16 +94,6 @@ namespace CargaFiles.Controllers
             return RedirectToAction("Index", "Archivo");
         }
 
-        //[HttpPost]
-        //public void mostrar(int IdArchivo)
-        //{
-        //    Archivos oArchivo = oLista.Where(a => a.IdArchivo == IdArchivo).FirstOrDefault();
-        //    byte[] archivo = oArchivo.Archivo;
-        //    var img = File(oArchivo.Archivo, "application/");
-
-        //}
-
-
         //metodo para traer los bytes de la bd y convertilo a imagen para luego mostrarlo en el front
         public ActionResult Mostrar(int IdArchivo)
         {
