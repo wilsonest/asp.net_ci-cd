@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row" >
+    @foreach (CargaFiles.Models.Archivos item in Model)
+    {
+
+
+        <div class="col-sm-6 col-md-4" >
+            <div class="thumbnail" style="height:450px">
+                <img src="@Url.Action("ver", "Principal", new { IdArchivo = item.IdArchivo })" style="height:225px">
+                <div class="caption">
+                    <h3>@Url.Action(item.Nombre).Replace("/Principal/", "")</h3>
+                    <p>...</p>
+                    <p><a href="#" class="btn btn-primary" role="button">Ver</a> <a href="#" class="btn btn-default" role="button">Guardar</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!--<tr>
+            <td>@item.Nombre</td>
+            <td>@item.Extension.Replace(".", "")</td>-->
+        @*mostrar imagen*@
+        <!--<td>-->
+        @*<img src="@Url.Action("ver", "Principal", new { IdArchivo = item.IdArchivo })" width="40">*@
+
+        @*</td>
+                <td>
+                    <form action="@Url.Action("DescargarArchivo","Archivo")" method="post">
+                        <input type="hidden" name="IdArchivo" value="@item.IdArchivo" />
+                        <button class="btn btn-danger btn-sm" type="submit">Descarga</button>
+                    </form>
+                    <form action="@Url.Action("Delete","Archivo")" method="post">
+                        <input type="hidden" name="IdArchivo" value="@item.IdArchivo" />
+                        <button class="btn btn-danger btn-sm" type="submit">Eliminar</button>
+                    </form>
+                </td>
+
+            </tr>*@
+
+    }
+</div>

@@ -15,6 +15,7 @@ namespace CargaFiles.Controllers
     {
         // GET: Acceso
         public ActionResult Inicio()
+        
         {
             return View();
         }

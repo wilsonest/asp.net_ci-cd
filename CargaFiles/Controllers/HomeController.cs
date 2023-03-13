@@ -13,7 +13,7 @@ using CargaFiles.Models;
 
 namespace CargaFiles.Controllers
 {
-    [Authorize]
+    //[Authorize] // si necesitamos restringir algunos campos o vistas a algun perfil
     public class HomeController : Controller
     {
        
@@ -22,7 +22,7 @@ namespace CargaFiles.Controllers
             return View();
         }
         //[Authorize]
-        [PermisosRol(Rol.Administrador)]
+        //[PermisosRol(Rol.Administrador)]
         public ActionResult About()
         {
             ViewBag.Message = "bienvenido a la pagina about";
@@ -31,7 +31,7 @@ namespace CargaFiles.Controllers
         }
 
 
-        [PermisosRol(Models.Rol.Administrador)]
+        //[PermisosRol(Models.Rol.Administrador)]
         public ActionResult Contact()
         {
             ViewBag.Message = "bienvenido a la pagina contact";

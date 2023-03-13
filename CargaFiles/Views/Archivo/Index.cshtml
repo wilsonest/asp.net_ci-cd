@@ -42,12 +42,16 @@
                                 <img src="@Url.Action("Mostrar", "Archivo", new { IdArchivo = item.IdArchivo })"width="40">
                             
                             </td>
-                                <td>
-                                    <form action="@Url.Action("DescargarArchivo","Archivo")" method="post">
-                                        <input type="hidden" name="IdArchivo" value="@item.IdArchivo" />
-                                        <button class="btn btn-danger btn-sm" type="submit">Descarga</button>
-                                    </form>
-                                </td>
+                            <td>
+                                <form action="@Url.Action("DescargarArchivo","Archivo")" method="post">
+                                    <input type="hidden" name="IdArchivo" value="@item.IdArchivo" />
+                                    <button class="btn btn-danger btn-sm" type="submit">Descarga</button>
+                                </form>
+                                <form action="@Url.Action("Delete","Archivo")" method="post">
+                                    <input type="hidden" name="IdArchivo" value="@item.IdArchivo" />
+                                    <button class="btn btn-danger btn-sm" type="submit">Eliminar</button>
+                                </form>
+                            </td>
 
                             </tr>
 

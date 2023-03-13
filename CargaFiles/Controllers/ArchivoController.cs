@@ -19,25 +19,26 @@ namespace CargaFiles.Controllers
             return View();
         }
 
-        public void obtener()
-        {
-            DataTable productos = new DataTable();
-            using (SqlConnection oconexion = new SqlConnection(cadena))
-            {
-                SqlCommand cmd = new SqlCommand("select * from archivos", oconexion);
-                cmd.CommandType = CommandType.Text;
-                oconexion.Open();
+        //public void obtener()
+        //{
+        //    DataTable productos = new DataTable();
+        //    using (SqlConnection oconexion = new SqlConnection(cadena))
+        //    {
+        //        SqlCommand cmd = new SqlCommand("select * from archivos", oconexion);
+        //        cmd.CommandType = CommandType.Text;
+        //        oconexion.Open();
 
 
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                da.Fill(productos);
-                da.Dispose();
-            }
-        }
+        //        SqlDataAdapter da = new SqlDataAdapter(cmd);
+        //        da.Fill(productos);
+        //        da.Dispose();
+        //    }
+        //}
 
-        // GET: Archivo
+        //GET: Archivo
         public ActionResult Index()
         {
+
             //obtener();
             oLista = new List<Archivos>();
             using (SqlConnection oconexion = new SqlConnection(cadena))
@@ -86,6 +87,21 @@ namespace CargaFiles.Controllers
                 cmd.Parameters.AddWithValue("@nombre", Nombre + "." + Extension);
                 cmd.Parameters.AddWithValue("@archivo", data);
                 cmd.Parameters.AddWithValue("@extension", Extension);
+                cmd.CommandType = CommandType.Text;
+                oconexion.Open();
+                cmd.ExecuteNonQuery();
+            }
+
+            return RedirectToAction("Index", "Archivo");
+        }
+
+        [HttpPost]
+        public ActionResult Delete(int IdArchivo)
+        {
+
+            using (SqlConnection oconexion = new SqlConnection(cadena))
+            {
+                SqlCommand cmd = new SqlCommand("delete from archivos where IdArchivo =" + IdArchivo, oconexion);
                 cmd.CommandType = CommandType.Text;
                 oconexion.Open();
                 cmd.ExecuteNonQuery();
