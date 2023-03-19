@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-
-
+﻿using CargaFiles.Logica;
 using CargaFiles.Models;
-using CargaFiles.Logica;
+using System.Web.Mvc;
 using System.Web.Security;
 
 namespace CargaFiles.Controllers
@@ -26,20 +20,41 @@ namespace CargaFiles.Controllers
             //mandamos los parametros al modelo y metodo
             Usuarios objeto = new LO_Usuario().EncontrarUsuario(correo, clave);
 
-            if (objeto.Nombres != null)
+            //Session["Usuario"] = objeto.Nombre;
+            if (objeto.Nombre != null)
             {
+                FormsAuthentication.SetAuthCookie(objeto.ToString(), false);
 
+                Session["Usuario"] = objeto.Nombre;
 
-                FormsAuthentication.SetAuthCookie(objeto.Correo, false);
-
-                Session["Usuario"] = objeto;
-
-                return RedirectToAction("Index", "Archivo");
+                return RedirectToAction("Index", "Principal");
             }
 
 
-
             return View();
+        }
+
+
+        public ActionResult Registrar()
+
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Registrar(Usuarios user)
+        {
+            
+
+            if (user.Clave == null || user.Nombre == null)
+            {
+                return View("Error", new { message = "Falla al registrarte" });
+
+            }
+
+            Usuarios objeto = new LO_Usuario().Guardar(user);
+            ViewBag.Message = "User registered successfully!";
+            return RedirectToAction("Inicio", "Acceso");
         }
     }
 }

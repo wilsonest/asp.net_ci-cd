@@ -54,7 +54,8 @@ namespace CargaFiles.Controllers
             Session["Usuario"] = null;
 
 
-            return RedirectToAction("Inicio", "Acceso");
+            //return RedirectToAction("Inicio", "Acceso");
+            return RedirectToAction("Index", "Principal");
 
 
 

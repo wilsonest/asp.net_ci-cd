@@ -1,0 +1,48 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Registrar</title>
+    @Styles.Render("~/Content/css")
+</head>
+<body>
+    <div class="container">
+
+        <div class="row">
+
+
+            <div class="col-sm-8 col-sm-offset-2">
+
+
+                <form action="@Url.Action("Registrar","Acceso")" class="bg-info" style="padding:10px" method="post">
+
+                    <div class="form-group">
+                        <label>Nombres Completo</label>
+                        <input class="form-control" type="text" name="Nombre" />
+                        <label>Apellido</label>
+                        <input class="form-control" type="text" name="Apellido" />
+                        <label>Correo</label>
+                        <input class="form-control" type="email" name="Correo" />
+                        <label>Contraseña</label>
+                        <input class="form-control" type="password" name="Clave" />
+                    </div>
+
+                    <button type="submit" class="btn btn-success">Registrar</button>
+                </form>
+
+
+            </div>
+
+
+        </div>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+</body>
+</html>
