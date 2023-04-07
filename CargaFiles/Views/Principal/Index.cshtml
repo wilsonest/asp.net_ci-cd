@@ -1,25 +1,28 @@
-﻿
+﻿@model List<CargaFiles.Models.Products>
+
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <h1>@Session["UsuarioNombre"]</h1>
-<div class="row" >
-    @foreach (CargaFiles.Models.Products item in Model)
+
+<div class="row">
+    @foreach (var item in Model)
     {
-
-
-        <div class="col-sm-6 col-md-4" >
-            <div class="thumbnail" style="height:450px">
-                <img src="@Url.Action("ver", "Principal", new { IdProducts = item.IdProducto })" style="height:225px">
+        <div class="col-sm-6 col-md-4">
+            <div class="thumbnail">
+                <img src="@Url.Action("ver", "Principal", new { IdProducts = item.IdProducto })">
                 <div class="caption">
-                    <h3>@Url.Action(item.Nombre).Replace("/Principal/", "").Replace("%20"," ")</h3>
-                    <p>@Url.Action(item.Descripcion).Replace("/Principal/", "").Replace("%20"," ")</p>
-                    @*<p>@ViewBag.Descripcion</p>*@
-                    <p><a href="@Url.Action("InfoProdutcs","Product",new { idProducto = item.IdProducto, descripcion = item.Descripcion  })" class="btn btn-primary" role="button">Ver</a>
-                    <a href="#" class="btn btn-default" role="button">Guardar</a></p>
+                    <h3>@item.Nombre</h3>
+                    <p>@item.Descripcion</p>
+                    <p>
+                        <a href="@Url.Action("InfoProdutcs","Product",new { idProducto = item.IdProducto, descripcion = item.Descripcion })" class="btn btn-primary" role="button">Ver</a>
+                        <a href="#" class="btn btn-default" role="button">Guardar</a>
+                    </p>
                 </div>
             </div>
         </div>
     }
 </div>
+

@@ -12,36 +12,12 @@ namespace CargaFiles.Controllers
 {
     public class PrincipalController : Controller
     {
-        static string cadena = "Data Source=ZIBOR-64517;Initial Catalog=DBARCHIVOS;Integrated Security=true";
-        static List<Products> oLista = new List<Products>();
-        static List<Imagenes> img = new List<Imagenes>();
         // GET: Principal
         public ActionResult Index()
         {
-            //obtener();
-            oLista = new List<Products>();
-            using (SqlConnection oconexion = new SqlConnection(cadena))
-            {
-                SqlCommand cmd = new SqlCommand("select * from Productos", oconexion);
-                cmd.CommandType = CommandType.Text;
-                oconexion.Open();
-                
-                using (SqlDataReader dr = cmd.ExecuteReader())
-                {
-                    while (dr.Read())
-                    {
-                        Products archivoE = new Products();
-
-                        archivoE.IdProducto = Convert.ToInt32(dr["IdProducto"]);
-                        archivoE.Nombre = dr["Nombre"].ToString();
-                        archivoE.Descripcion = dr["Descripcion"].ToString();
-                        archivoE.Id = Convert.ToInt32(dr["Id"]);
-                        oLista.Add(archivoE);
-                    }
-
-                }
-            }
-            return View(oLista);
+            Lo_Usuario lo = new Lo_Usuario();
+            List<Products> productos = lo.GetAllProducts();
+            return View(productos);
         }
 
         public ActionResult ver(int IdProducts)
