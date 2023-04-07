@@ -51,14 +51,11 @@ namespace CargaFiles.Controllers
         {
 
             FormsAuthentication.SignOut();
-            Session["Usuario"] = null;
+            Session["UsuarioNombre"] = null;
 
 
             //return RedirectToAction("Inicio", "Acceso");
             return RedirectToAction("Index", "Principal");
-
-
-
         }
     }
 }

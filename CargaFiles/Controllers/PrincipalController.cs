@@ -1,4 +1,5 @@
-﻿using CargaFiles.Models;
+﻿using CargaFiles.Logica;
+using CargaFiles.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,48 +13,50 @@ namespace CargaFiles.Controllers
     public class PrincipalController : Controller
     {
         static string cadena = "Data Source=ZIBOR-64517;Initial Catalog=DBARCHIVOS;Integrated Security=true";
-        static List<Archivos> oLista = new List<Archivos>();
+        static List<Products> oLista = new List<Products>();
+        static List<Imagenes> img = new List<Imagenes>();
         // GET: Principal
         public ActionResult Index()
         {
             //obtener();
-            oLista = new List<Archivos>();
+            oLista = new List<Products>();
             using (SqlConnection oconexion = new SqlConnection(cadena))
             {
-                SqlCommand cmd = new SqlCommand("select * from archivos", oconexion);
+                SqlCommand cmd = new SqlCommand("select * from Productos", oconexion);
                 cmd.CommandType = CommandType.Text;
                 oconexion.Open();
-
+                
                 using (SqlDataReader dr = cmd.ExecuteReader())
                 {
                     while (dr.Read())
                     {
-                        Archivos archivoE = new Archivos();
+                        Products archivoE = new Products();
 
-                        archivoE.IdArchivo = Convert.ToInt32(dr["IdArchivo"]);
+                        archivoE.IdProducto = Convert.ToInt32(dr["IdProducto"]);
                         archivoE.Nombre = dr["Nombre"].ToString();
-                        archivoE.Archivo = dr["Archivo"] as byte[];
-                        archivoE.Extension = dr["Extension"].ToString();
+                        archivoE.Descripcion = dr["Descripcion"].ToString();
+                        archivoE.Id = Convert.ToInt32(dr["Id"]);
                         oLista.Add(archivoE);
-
                     }
+
                 }
             }
-
-
             return View(oLista);
         }
 
-
-        public ActionResult ver(int IdArchivo)
+        public ActionResult ver(int IdProducts)
         {
-            Archivos oArchivo = oLista.Where(a => a.IdArchivo == IdArchivo).FirstOrDefault();
-            if (oArchivo == null)
+            Lo_Usuario lo = new Lo_Usuario();
+            DataTable dt = lo.GetImagenes();
+            DataRow row = dt.AsEnumerable().FirstOrDefault(r => r.Field<int>("IdProducto") == IdProducts);
+            if (row != null)
             {
-                return HttpNotFound();
+                byte[] imgc = (byte[])row["Imagen"];
+                return File(imgc, "application/octet-stream");
             }
-
-            return File(oArchivo.Archivo, "application/octet-stream");
+            return RedirectToAction("Index", "Principal");
         }
     }
+
+
 }

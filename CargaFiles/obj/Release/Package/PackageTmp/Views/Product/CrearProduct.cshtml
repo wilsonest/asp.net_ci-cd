@@ -1,0 +1,43 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>CrearProduct</title>
+    @Styles.Render("~/Content/css")
+</head>
+<body>
+    <div class="container">
+
+        <div class="row">
+
+
+            <div class="col-sm-8 col-sm-offset-2">
+                <form action="@Url.Action("CrearProduct","Product")" class="bg-info" style="padding:10px" method="post" enctype="multipart/form-data">
+
+                    <div class="form-group">
+                        <label>Nombres Producto o Servicio</label>
+                        <input class="form-control" type="text" name="Nombre" />
+                        <label>Descripcion</label>
+                        <input class="form-control" type="text" name="Descripcion" />
+                    </div>
+                    <div class="form-group">
+                        <label>Fotos o Imagenes</label>
+                        <input class="form-control" type="file" name="Archivo" />
+                    </div>
+                    <button type="submit" class="btn btn-success">Crear</button>
+                </form>
+                @Scripts.Render("~/bundles/jquery")
+                @Scripts.Render("~/bundles/bootstrap")
+            </div>
+
+
+        </div>
+    </div>
+</body>
+</html>

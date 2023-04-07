@@ -21,16 +21,27 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Inicio", "Index", "Archivo")</li>
+                    <li>@Html.ActionLink("Inicio", "Index", "Principal")</li>
                     <li>@Html.ActionLink("Acerca de", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contacto", "Contact", "Home")</li>
-                    @if (Session["Usuario"] == null)
+                    @*<li>@Html.ActionLink("Crear Producto", "CrearProduct", "Product")</li>*@
+                    @if (Session["UsuarioNombre"] != null)
                     {
-                        <li style="left: 800px;">@Html.ActionLink("Iniciar Sesion", "Inicio", "Acceso")</li>
+                        if (string.IsNullOrEmpty(Session["UsuarioNombre"].ToString()))
+                        {
+                            <li>@Html.ActionLink("", "", "")</li>
+                        }
+                        else
+                        {
+                            <li>@Html.ActionLink("Crear Producto", "CrearProduct", "Product")</li>
+                        }
+                    }
+                    @if (Session["UsuarioNombre"] == null)
+                    {
+                        <li style="left: 860px;">@Html.ActionLink("Iniciar Sesion", "Inicio", "Acceso")</li>
                     }
                     else
                     {
-                        <li style="left: 800px;">@Html.ActionLink("Cerrar Sesion", "CerrarSesion", "Home")</li>
+                        <li style="left: 750px;">@Html.ActionLink("Cerrar Sesion", "CerrarSesion", "Home")</li>
                     }
 
                 </ul>

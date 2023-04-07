@@ -1,18 +1,17 @@
-﻿using System;
+﻿using CargaFiles.Models;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-
-using CargaFiles.Models;
-using System.Data.SqlClient;
 using System.Data;
-using System.Text;
+using System.Data.SqlClient;
+using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
+using System.Text;
+using System.Web;
 
 namespace CargaFiles.Logica
 {
-    public class LO_Usuario
+    public class Lo_Usuario
     {
         string cadena = "Data Source=ZIBOR-64517;Initial Catalog=DBARCHIVOS;Integrated Security=true";
 
@@ -25,7 +24,7 @@ namespace CargaFiles.Logica
             using (SqlConnection conexion = new SqlConnection(cadena))
             {
                 // query que se va a mandar
-                string query = "select Nombre,Apellido,Correo,Clave,IdRol from Usuarios where Correo = @pcorreo and Clave = @pclave";
+                string query = "select * from Usuarios where Correo = @pcorreo and Clave = @pclave";
 
                 SqlCommand cmd = new SqlCommand(query, conexion);
                 //llenamos los valores del query con los valores de entrada establecidos en el parametro
@@ -33,7 +32,7 @@ namespace CargaFiles.Logica
                 cmd.Parameters.AddWithValue("@pclave", Clave);
                 cmd.CommandType = CommandType.Text;
                 conexion.Open();
-                
+
                 //los valores que traemos con el select
                 using (SqlDataReader dr = cmd.ExecuteReader())
                 {
@@ -43,6 +42,7 @@ namespace CargaFiles.Logica
                         //se llevan los atrubitos de la clase usuarios con lo que este en la bd
                         objeto = new Usuarios()
                         {
+                            Id = Convert.ToInt32(dr["Id"]),
                             Nombre = dr["Nombre"].ToString(),
                             Apellido = dr["Apellido"].ToString(),
                             Correo = dr["Correo"].ToString(),
@@ -54,11 +54,78 @@ namespace CargaFiles.Logica
                     return objeto;
                 }
             }
-            
+
 
         }
 
-      
+        public Products GetProductos(int a)
+        {
+
+            using (SqlConnection conexion = new SqlConnection(cadena))
+            {
+                //string query = "SELECT TOP 1 * FROM Productos INNER JOIN Usuarios ON Productos.Id = Usuarios.Id WHERE Usuarios.Id ="+ a +"ORDER BY Productos.IdProducto DESC";
+                string query = "SELECT TOP 1 * FROM Productos INNER JOIN Usuarios ON Productos.Id = Usuarios.Id WHERE Usuarios.Id = @id ORDER BY Productos.IdProducto DESC";
+                SqlCommand cmd = new SqlCommand(query, conexion);
+                cmd.Parameters.AddWithValue("@id", a);
+                cmd.CommandType = CommandType.Text;
+                conexion.Open();
+
+                using (SqlDataReader dr = cmd.ExecuteReader())
+                {
+                    Products objeto = new Products();
+                    while (dr.Read())
+                    {
+                        //se llevan los atrubitos de la clase usuarios con lo que este en la bd
+                        objeto = new Products()
+                        {
+                            IdProducto = Convert.ToInt32(dr["IdProducto"]),
+                            Nombre = dr["Nombre"].ToString(),
+                            Descripcion = dr["Descripcion"].ToString(),
+                            Id = Convert.ToInt32(dr["Id"]),
+                        };
+                    }
+                    return objeto;
+                }
+            }
+
+
+        }
+
+        public DataTable GetImagenes()
+        {
+            DataTable dt = new DataTable();
+
+            using (SqlConnection conexion = new SqlConnection(cadena))
+            {
+                string query = "select * from Fotos";
+                SqlCommand cmd = new SqlCommand(query, conexion);
+                cmd.CommandType = CommandType.Text;
+                conexion.Open();
+
+                using (SqlDataReader dr = cmd.ExecuteReader())
+                {
+                    // Add columns to the DataTable
+                    dt.Columns.Add("Id", typeof(int));
+                    dt.Columns.Add("NombreImg", typeof(string));
+                    dt.Columns.Add("Imagen", typeof(byte[]));
+                    dt.Columns.Add("IdProducto", typeof(int));
+
+                    // Loop through the SqlDataReader and add rows to the DataTable
+                    while (dr.Read())
+                    {
+                        DataRow row = dt.NewRow();
+                        row["Id"] = Convert.ToInt32(dr["Id"]);
+                        row["NombreImg"] = dr["NombreImg"].ToString();
+                        row["Imagen"] = (byte[])dr["Imagen"];
+                        row["IdProducto"] = Convert.ToInt32(dr["IdProducto"]);
+                        dt.Rows.Add(row);
+                    }
+                }
+            }
+
+            return dt;
+        }
+
         public Usuarios Guardar(Usuarios user)
         {
             var crypto = encrip(user.Clave);
@@ -76,9 +143,50 @@ namespace CargaFiles.Logica
                 cmd.ExecuteNonQuery();
             }
             return user;
-            
+
         }
 
+        public Products CrearProducto(Products prod, int a)
+        {
+            using (SqlConnection oconexion = new SqlConnection(cadena))
+            {
+                SqlCommand cmd = new SqlCommand("insert into Productos(Nombre,Descripcion,Id) values(@nombre,@descripcion,@id)", oconexion);
+                cmd.Parameters.AddWithValue("@nombre", prod.Nombre);
+                cmd.Parameters.AddWithValue("@descripcion", prod.Descripcion);
+                cmd.Parameters.AddWithValue("@id", a);
+                cmd.CommandType = CommandType.Text;
+                oconexion.Open();
+                cmd.ExecuteNonQuery();
+            }
+            return prod;
+
+        }
+
+        public void SubirImagen(int idProducto, List<HttpPostedFileBase> archivos)
+        {
+            using (SqlConnection oconexion = new SqlConnection(cadena))
+            {
+                oconexion.Open();
+
+                foreach (var archivo in archivos)
+                {
+                    if (archivo != null)
+                    {
+                        string nombre = Path.GetFileName(archivo.FileName);
+                        using (MemoryStream ms = new MemoryStream())
+                        {
+                            archivo.InputStream.CopyTo(ms);
+                            byte[] imagen = ms.ToArray();
+                            SqlCommand cmd = new SqlCommand("insert into Fotos(NombreImg,Imagen,IdProducto) values(@nombreimg,@imagen,@idproducto)", oconexion);
+                            cmd.Parameters.AddWithValue("@nombreimg", nombre);
+                            cmd.Parameters.AddWithValue("@imagen", imagen);
+                            cmd.Parameters.AddWithValue("@idproducto", idProducto);
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+            }
+        }
 
         public static string encrip(string text)
         {
@@ -103,5 +211,6 @@ namespace CargaFiles.Logica
             //finalKey = Convert.ToBase64String(encode);
             //return finalKey;
         }
+
     }
 }

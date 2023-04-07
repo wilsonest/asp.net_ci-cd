@@ -178,18 +178,16 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Context\DbContextLocal.cs" />
     <Compile Include="Controllers\AccesoController.cs" />
-    <Compile Include="Controllers\ArchivoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PrincipalController.cs" />
+    <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Logica\LO_Usuario.cs" />
-    <Compile Include="Mapper\ForumMap.cs" />
-    <Compile Include="Models\Archivos.cs" />
-    <Compile Include="Models\Forum.cs" />
+    <Compile Include="Logica\Lo_Usuario.cs" />
+    <Compile Include="Models\Imagenes.cs" />
+    <Compile Include="Models\Products.cs" />
     <Compile Include="Models\Rol.cs" />
     <Compile Include="Models\Usuarios.cs" />
     <Compile Include="Permisos\PermisosRolAttribute.cs" />
@@ -248,11 +246,12 @@
     <Content Include="Views\Principal\Index.cshtml" />
     <Content Include="Views\Acceso\Registrar.cshtml" />
     <Content Include="Views\Shared\Index.cshtml" />
-    <Content Include="Views\Forum\New.cshtml" />
-    <Content Include="Views\Forum\AddReturn.cshtml" />
+    <Content Include="Views\Product\CrearProduct.cshtml" />
+    <Content Include="Views\Product\InfoProdutcs.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Context\" />
     <Folder Include="img\" />
   </ItemGroup>
   <ItemGroup>

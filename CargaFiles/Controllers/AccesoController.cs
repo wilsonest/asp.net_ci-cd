@@ -18,14 +18,15 @@ namespace CargaFiles.Controllers
         public ActionResult Inicio(string correo, string clave)
         {
             //mandamos los parametros al modelo y metodo
-            Usuarios objeto = new LO_Usuario().EncontrarUsuario(correo, clave);
+            Usuarios objeto = new Lo_Usuario().EncontrarUsuario(correo, clave);
 
             //Session["Usuario"] = objeto.Nombre;
             if (objeto.Nombre != null)
             {
                 FormsAuthentication.SetAuthCookie(objeto.ToString(), false);
 
-                Session["Usuario"] = objeto.Nombre;
+                Session["UsuarioNombre"] = objeto.Nombre;
+                Session["IdUsuario"] = objeto.Id;
 
                 return RedirectToAction("Index", "Principal");
             }
@@ -52,7 +53,7 @@ namespace CargaFiles.Controllers
 
             }
 
-            Usuarios objeto = new LO_Usuario().Guardar(user);
+            Usuarios objeto = new Lo_Usuario().Guardar(user);
             ViewBag.Message = "User registered successfully!";
             return RedirectToAction("Inicio", "Acceso");
         }
