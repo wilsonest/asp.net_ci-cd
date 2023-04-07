@@ -1,12 +1,14 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Mi aplicación ASP.NET</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" integrity="sha512-P0rHr7YhXgzyRxt7VxZhDJH+o7/gJLk1u8fwyT+D1QaYrq9aStz0J+ZfjLZJxT87LsJwT8s7s/z1DmQkBF9YQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -59,5 +61,18 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js" integrity="sha512-y6U4i6vujg0wW8R/h+pL55JteOynOzX9LW8ogpgBQlO/uCG2vLfO+g94IkkEYzXWlv1+O/xzJTxKpAhIvBo10w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    
+    <script>
+        $(document).ready(function () {
+            $(".img-producto").click(function () {
+                var imagenSrc = $(this).attr("src");
+                $("#imagen-modal").attr("src", imagenSrc);
+                $("#modal-imagen").modal();
+            });
+        });
+    </script>
 </body>
 </html>

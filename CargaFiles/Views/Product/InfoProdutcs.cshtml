@@ -9,10 +9,22 @@
     @foreach (var imagen in ViewBag.Imagenes)
     {
         <div class="col-md-4">
-            <img src="@imagen" style="height: 200px; width: 200px" />
+            <img src="@imagen" class="img-producto" style="height: 200px; width: 200px" />
         </div>
     }
 
 </div>
-<h2>Descripcion del producto @ViewBag.Descripcion</h2>
+
+<h2>@ViewBag.Descripcion</h2>
+
+<div class="modal fade" id="modal-imagen" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <img src="" class="img-responsive" id="imagen-modal" />
+            </div>
+        </div>
+    </div>
+</div>
+
 
