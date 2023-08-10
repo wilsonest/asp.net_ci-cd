@@ -8,12 +8,15 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
+using System.Configuration;
 
 namespace CargaFiles.Logica
 {
     public class Lo_Usuario
     {
-        string cadena = "Data Source=ZIBOR-64517;Initial Catalog=DBARCHIVOS;Integrated Security=true";
+        //string cadena = "Data Source=ZIBOR-64517;Initial Catalog=DBARCHIVOS;Integrated Security=true";  cadena vieja ya se mejoro en el web.config
+        string cadena = ConfigurationManager.ConnectionStrings["Connection"].ConnectionString;
+
 
         public List<Products> GetAllProducts()
         {
@@ -45,6 +48,7 @@ namespace CargaFiles.Logica
 
 
             var Clave = encrip(clave);
+            //var Clave = EncryptStringAES(clave);
 
             using (SqlConnection conexion = new SqlConnection(cadena))
             {
@@ -64,6 +68,7 @@ namespace CargaFiles.Logica
                     Usuarios objeto = new Usuarios();
                     while (dr.Read())
                     {
+                        //var clavedes = DecryptStringFromBytes_Aes(Convert.FromBase64String(dr["Clave"].ToString()));  //prueba para zibor
                         //se llevan los atrubitos de la clase usuarios con lo que este en la bd
                         objeto = new Usuarios()
                         {
@@ -72,6 +77,7 @@ namespace CargaFiles.Logica
                             Apellido = dr["Apellido"].ToString(),
                             Correo = dr["Correo"].ToString(),
                             Clave = dr["Clave"].ToString(),
+                            //Clave = clavedes,
                             IdRol = (Rol)dr["IdRol"],
 
                         };
@@ -154,6 +160,8 @@ namespace CargaFiles.Logica
         public Usuarios Guardar(Usuarios user)
         {
             var crypto = encrip(user.Clave);
+            //var crypto = EncryptStringAES(user.Clave);
+
             using (SqlConnection oconexion = new SqlConnection(cadena))
             {
                 SqlCommand cmd = new SqlCommand("insert into Usuarios(Nombre,Apellido,Correo,Clave,IdRol) values(@nombre,@apellido,@correo,@clave,@IdRol)", oconexion);
@@ -235,6 +243,98 @@ namespace CargaFiles.Logica
             //encode = Encoding.UTF8.GetBytes(text);
             //finalKey = Convert.ToBase64String(encode);
             //return finalKey;
+        }
+
+        public static string EncryptStringAES(string plainText)
+        {
+            var Clave_AES_Vector = "3Mi9RqPe2vd5npXAFNWj5w==";
+            byte[] IV = Convert.FromBase64String(Clave_AES_Vector);
+            byte[] Key = Convert.FromBase64String("u8bjuHDfPs3zDv57doBIgiio28coN2LH");
+
+            if (plainText == null || plainText.Length <= 0)
+                throw new ArgumentNullException("plainText");
+            if (Key == null || Key.Length <= 0)
+                throw new ArgumentNullException("Key");
+            if (IV == null || IV.Length <= 0)
+                throw new ArgumentNullException("Key");
+            byte[] encrypted;
+            // Create an Aes object
+            // with the specified key and IV.
+            using (AesManaged aesAlg = new AesManaged())
+            {
+                aesAlg.Key = Key;
+                aesAlg.IV = IV;
+
+                // Create a decrytor to perform the stream transform.
+                ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
+
+                // Create the streams used for encryption.
+                using (MemoryStream msEncrypt = new MemoryStream())
+                {
+                    using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
+                    {
+                        using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
+                        {
+                            //Write all data to the stream.
+                            swEncrypt.Write(plainText);
+                        }
+                        encrypted = msEncrypt.ToArray();
+                    }
+                }
+            }
+
+
+            // Return the encrypted bytes from the memory stream.
+            return Convert.ToBase64String(encrypted);
+        }
+
+
+
+        string DecryptStringFromBytes_Aes(byte[] cipherText)
+        {
+            var Clave_AES_Vector = "3Mi9RqPe2vd5npXAFNWj5w==";
+            byte[] IV = Convert.FromBase64String(Clave_AES_Vector);
+            byte[] Key = Convert.FromBase64String("u8bjuHDfPs3zDv57doBIgiio28coN2LH");
+            // Check arguments.
+            if (cipherText == null || cipherText.Length <= 0)
+                throw new ArgumentNullException("cipherText");
+            if (Key == null || Key.Length <= 0)
+                throw new ArgumentNullException("Key");
+            if (IV == null || IV.Length <= 0)
+                throw new ArgumentNullException("Key");
+
+            // Declare the string used to hold
+            // the decrypted text.
+            string plaintext = null;
+
+            // Create an Aes object
+            // with the specified key and IV.
+            using (Aes aesAlg = Aes.Create())
+            {
+                aesAlg.Key = Key;
+                aesAlg.IV = IV;
+
+                // Create a decrytor to perform the stream transform.
+                ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
+
+                // Create the streams used for decryption.
+                using (MemoryStream msDecrypt = new MemoryStream(cipherText))
+                {
+                    using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+                    {
+                        using (StreamReader srDecrypt = new StreamReader(csDecrypt))
+                        {
+                            // Read the decrypted bytes from the decrypting stream
+                            // and place them in a string.
+                            plaintext = srDecrypt.ReadToEnd();
+                        }
+                    }
+                }
+
+            }
+
+            return plaintext;
+
         }
 
     }

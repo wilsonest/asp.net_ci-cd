@@ -1,5 +1,6 @@
 ﻿using CargaFiles.Logica;
 using CargaFiles.Models;
+using CargaFiles.Permisos;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -14,11 +15,12 @@ namespace CargaFiles.Controllers
     public class ProductController : Controller
     {
         // GET: Product
+        [Authorize]
         public ActionResult CrearProduct()
         {
             return View();
         }
-
+        [Authorize]
         [HttpPost]
         public ActionResult CrearProduct(Products prod, List<HttpPostedFileBase> Archivos)
         {

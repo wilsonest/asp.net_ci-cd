@@ -21,7 +21,7 @@ namespace CargaFiles.Controllers
         {
             return View();
         }
-        //[Authorize]
+        [Authorize]
         //[PermisosRol(Rol.Administrador)]
         public ActionResult About()
         {
